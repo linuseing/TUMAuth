@@ -1,0 +1,9 @@
+name: TumAuth
+main: tum.auth.TumAuth
+version: 1.0
+
+commands:
+  gommemode:
+    description: Fucking Gommemode du hund
+    usage: /<command>
+    permission: yourplugin.yourcommandpermission
