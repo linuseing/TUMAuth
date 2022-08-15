@@ -4,6 +4,10 @@ version: 1.0
 
 commands:
   gommemode:
-    description: Fucking Gommemode du hund
+    description: Fucking Gommemode
     usage: /<command>
-    permission: yourplugin.yourcommandpermission
+    permission: tumauth.gommemode
+  update_auth_config:
+    description: Reloads plugin config
+    usage: /<command>
+    permission: tumauth.reloadconfig
