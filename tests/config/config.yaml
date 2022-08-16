@@ -1,0 +1,5 @@
+db:
+  host: "db.org"
+  port: 5432
+  user: "user"
+  password: "password"
