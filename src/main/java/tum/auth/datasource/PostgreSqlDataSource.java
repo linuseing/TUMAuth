@@ -37,9 +37,12 @@ public class PostgreSqlDataSource {
         }
     }
 
+    public void disconnect() throws SQLException {
+        this.connection.close();
+    }
 
     public void addUser(User user) throws SQLException {
-        String sql = "INSERT INTO users (minecraft_uuid, TUM_id, is_authenticated, token) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO public.\"user\" (minecraft_uuid, tum_id, authenticated, token) VALUES (?, ?, ?, ?)";
         PreparedStatement statement = this.connection.prepareStatement(sql);
         statement.setString(1, user.getMinecraftUUID().toString());
         statement.setString(2, user.getTUMId());
@@ -48,30 +51,34 @@ public class PostgreSqlDataSource {
         statement.executeUpdate();
     }
 
-    public void updateUser(User user) throws SQLException {
-        String sql = "UPDATE users SET TUM_id = ?, is_authenticated = ?, token = ? WHERE minecraft_uuid = ?";
+    /**
+     * Update the values of a user from @param user. The minecraft_uuid and tum_id can't be changed.
+     * @return updated user
+     */
+    public User updateUser(User user) throws SQLException {
+        String sql = "UPDATE public.\"user\" SET authenticated = ?, token = ? WHERE minecraft_uuid = ?";
         PreparedStatement statement = this.connection.prepareStatement(sql);
-        statement.setString(1, user.getTUMId());
-        statement.setBoolean(2, user.isAuthenticated());
-        statement.setString(3, user.getToken());
-        statement.setString(4, user.getMinecraftUUID().toString());
+        statement.setBoolean(1, user.isAuthenticated());
+        statement.setString(2, user.getToken());
+        statement.setString(3, user.getMinecraftUUID().toString());
         statement.executeUpdate();
+        return user;
     }
 
-    public void getUser(User user) throws SQLException {
-        String sql = "SELECT * FROM users WHERE minecraft_uuid = ?";
+
+    public User getUser(UUID uuid) throws SQLException {
+        String sql = "SELECT * FROM public.\"user\" WHERE minecraft_uuid = ?";
         PreparedStatement statement = this.connection.prepareStatement(sql);
-        statement.setString(1, user.getMinecraftUUID().toString());
+        statement.setString(1, uuid.toString());
         ResultSet resultSet = statement.executeQuery();
         if (resultSet.next()) {
-            user.setTUMId(resultSet.getString("tum_id"));
-            user.setAuthenticated(resultSet.getBoolean("authenticated"));
-            user.setToken(resultSet.getString("token"));
-            user.setMinecraftUUID(UUID.fromString(resultSet.getString("minecraft_uuid")));
+            return new User(uuid, resultSet.getString("tum_id"), resultSet.getBoolean("authenticated"), resultSet.getString("token"));
+        } else {
+            return null;
         }
     }
 
-
-
-
+    public Connection getConnection() {
+        return this.connection;
+    }
 }
