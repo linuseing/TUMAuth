@@ -29,6 +29,17 @@ public class PostgreSqlDataSource implements DataSource {
     public void connect() throws SQLException {
         String url = "jdbc:postgresql://" + this.host + ":" + this.port + "/" + this.name;
         try {
+            Class.forName("org.postgresql.Driver"); // <--------- HERE
+            this.connection = DriverManager.getConnection(url, user, password);
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void connect(String url) throws SQLException {
+        try {
             this.connection = DriverManager.getConnection(url, user, password);
         } catch (SQLException e) {
             throw new SQLException(e);

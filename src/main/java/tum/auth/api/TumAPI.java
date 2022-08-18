@@ -59,4 +59,8 @@ public class TumAPI {
     private HttpUrl.Builder getBuilder() {
         return HttpUrl.parse("https://campus.tum.de/tumonline").newBuilder();
     }
+
+    public String getName() {
+        return name;
+    }
 }
