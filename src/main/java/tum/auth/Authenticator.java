@@ -1,10 +1,12 @@
 package tum.auth;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 import tum.auth.api.InvalidTumIdException;
+import tum.auth.configuration.LobbyProperties;
 import tum.auth.datasource.DataSource;
 import tum.auth.models.User;
 
@@ -13,14 +15,19 @@ import java.util.Set;
 import java.util.UUID;
 
 public class Authenticator {
-    private TumAuth tumAuth;
-    private DataSource dataSource;
-    private Set<Player> unauthenticatedPlayer = new HashSet<>();
-    private BukkitTask cleanUp;
+    private final TumAuth tumAuth;
+    private final DataSource dataSource;
+    private final Set<Player> unauthenticatedPlayer = new HashSet<>();
+    private final BukkitTask cleanUp;
+
+    private Location memberLobby;
+    private Location welcomeLobby;
 
     public Authenticator(TumAuth tumAuth) {
         this.tumAuth = tumAuth;
         dataSource = tumAuth.getDataSource();
+        reloadConfig();
+
         cleanUp = Bukkit.getScheduler().runTaskTimer(tumAuth, () -> unauthenticatedPlayer.removeIf(player -> {
             if (!player.isOnline()) {
                 return true;
@@ -33,6 +40,22 @@ public class Authenticator {
             }
             return false;
         }), 100, 100);
+    }
+
+    public void reloadConfig() {
+        memberLobby = new Location(
+                Bukkit.getWorld(tumAuth.getSettingsManager().getProperty(LobbyProperties.MEMBERS_WORLD)),
+                (double)tumAuth.getSettingsManager().getProperty(LobbyProperties.MEMBERS_X),
+                (double)tumAuth.getSettingsManager().getProperty(LobbyProperties.MEMBERS_Y),
+                (double)tumAuth.getSettingsManager().getProperty(LobbyProperties.MEMBERS_Z)
+        );
+
+        welcomeLobby = new Location(
+                Bukkit.getWorld(tumAuth.getSettingsManager().getProperty(LobbyProperties.WELCOME_WORLD)),
+                (double)tumAuth.getSettingsManager().getProperty(LobbyProperties.WELCOME_X),
+                (double)tumAuth.getSettingsManager().getProperty(LobbyProperties.WELCOME_Y),
+                (double)tumAuth.getSettingsManager().getProperty(LobbyProperties.WELCOME_Z)
+        );
     }
 
     public void tryLogin(Player player) {
@@ -90,15 +113,18 @@ public class Authenticator {
     }
 
     private void handleAuthenticatedPlayer(Player player, User user) {
+        player.teleport(memberLobby);
         player.sendMessage("Thank you for joining!");
     }
 
     private void handleUnauthenticatedPlayer(Player player) {
+        player.teleport(welcomeLobby);
         unauthenticatedPlayer.add(player);
         player.kickPlayer("Please activate your Token to be able to access this server.");
     }
 
     private void handleUnknownPlayer(Player player) {
+        player.teleport(welcomeLobby);
         unauthenticatedPlayer.add(player);
         player.sendMessage(
                 "Hey there.",
