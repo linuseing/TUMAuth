@@ -1,7 +1,6 @@
 package tum.auth;
 
 import ch.jalu.configme.SettingsManager;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import tum.auth.api.TumAPI;
 import tum.auth.commands.Gommemode;
@@ -20,6 +19,7 @@ public class TumAuth extends JavaPlugin {
     private SettingsManager settingsManager;
     private DataSource dataSource;
     private TumAPI api;
+    private Authenticator authenticator;
 
 
     @Override
@@ -33,6 +33,7 @@ public class TumAuth extends JavaPlugin {
             throw new RuntimeException(e);
         }
         api = new TumAPI("tum-mc");
+        authenticator = new Authenticator(this);
 
         getCommand("gommemode").setExecutor(new Gommemode());
         getCommand("update_auth_config").setExecutor(new ReloadConfig(this));
@@ -50,5 +51,9 @@ public class TumAuth extends JavaPlugin {
 
     public TumAPI getApi() {
         return api;
+    }
+
+    public Authenticator getAuthenticator() {
+        return authenticator;
     }
 }

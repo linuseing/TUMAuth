@@ -13,5 +13,5 @@ commands:
     permission: tumauth.reloadconfig
   tum-id:
     description: Sets your TUM-ID
-    usage: /<command>
+    usage: /<command> <tum id>
     permission: tumauth.authenticate

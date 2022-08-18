@@ -23,23 +23,6 @@ public class Join implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        UUID uuid = player.getUniqueId();
-        try {
-            User user = dataSource.getUser(uuid);
-            if (user == null) {
-                player.chat("Please set your TUM-ID using /tumid <id>");
-                return;
-            }
-            if (!user.isAuthenticated() && user.getToken() != null && tumAuth.getApi().verifyToken(user.getToken())) {
-                user.setAuthenticated(true);
-                dataSource.updateUser(user);
-                return;
-            }
-            if (user.isAuthenticated())
-                return;
-            player.kickPlayer("Please activate your Token to be able to access this server.");
-        } catch (Exception e) {
-            player.kickPlayer("Some error occurred reaching the database. Please try again later or contact an admin."+e.toString());
-        }
+        tumAuth.getAuthenticator().tryLogin(player);
     }
 }
