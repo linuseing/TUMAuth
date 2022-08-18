@@ -5,13 +5,13 @@ import java.util.UUID;
 public class User {
     private UUID minecraftUUID;
     private String TUMId;
-    private boolean isAuthenticated;
+    private boolean authenticated;
     private String token;
 
-    public User(UUID minecarftUUID, String TUMId, boolean isAuthenticated, String token) {
+    public User(UUID minecarftUUID, String TUMId, boolean authenticated, String token) {
         this.minecraftUUID = minecarftUUID;
         this.TUMId = TUMId;
-        this.isAuthenticated = isAuthenticated;
+        this.authenticated = authenticated;
         this.token = token;
     }
 
@@ -24,7 +24,7 @@ public class User {
     }
 
     public boolean isAuthenticated() {
-        return isAuthenticated;
+        return authenticated;
     }
 
     public String getToken() {
@@ -40,7 +40,7 @@ public class User {
     }
 
     public void setAuthenticated(boolean authenticated) {
-        isAuthenticated = authenticated;
+        this.authenticated = authenticated;
     }
 
     public void setToken(String token) {
