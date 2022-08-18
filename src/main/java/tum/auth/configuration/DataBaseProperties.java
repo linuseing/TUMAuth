@@ -17,4 +17,6 @@ public class DataBaseProperties implements SettingsHolder {
 
     public static final Property<String> DB_PASSWORD =
             newProperty("db.password", "-Default-");
+    public static final Property<String> DB_NAME =
+            newProperty("db.name", "-Default-");
 }

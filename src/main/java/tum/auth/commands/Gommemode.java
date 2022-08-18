@@ -25,7 +25,6 @@ public class Gommemode implements CommandExecutor {
             // Give the player our items (comma-seperated list of all ItemStack)
             player.getInventory().addItem(bricks, diamond);
         }
-
         return true;
     }
 }
