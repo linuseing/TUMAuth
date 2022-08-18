@@ -7,15 +7,13 @@ import tum.auth.models.User;
 import java.sql.*;
 import java.util.UUID;
 
-public class PostgreSqlDataSource {
+public class PostgreSqlDataSource implements DataSource {
 
-    private String host;
-    private int port;
-    private String user;
-    private String password;
-
-    private String name;
-
+    private final String host;
+    private final int port;
+    private final String user;
+    private final String password;
+    private final String name;
     private Connection connection;
 
 
