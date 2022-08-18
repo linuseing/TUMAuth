@@ -9,7 +9,7 @@ public class ConfigManager {
     public static SettingsManager getSettings(File config) {
         return SettingsManagerBuilder
                 .withYamlFile(config)
-                .configurationData(DataBaseProperties.class)
+                .configurationData(DataBaseProperties.class, LobbyProperties.class)
                 .create();
     }
 }
