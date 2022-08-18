@@ -27,8 +27,14 @@ public class TumAuth extends JavaPlugin {
 
         getCommand("gommemode").setExecutor(new Gommemode());
         getCommand("update_auth_config").setExecutor(new ReloadConfig(this));
-        getServer().getPluginManager().registerEvents(new Join(), this);
+        getServer().getPluginManager().registerEvents(new Join(this), this);
     }
 
+    public SettingsManager getSettingsManager() {
+        return settingsManager;
+    }
 
+    public DataSource getDataSource() {
+        return dataSource;
+    }
 }
