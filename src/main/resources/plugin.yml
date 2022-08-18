@@ -11,3 +11,7 @@ commands:
     description: Reloads plugin config
     usage: /<command>
     permission: tumauth.reloadconfig
+  tum-id:
+    description: Sets your TUM-ID
+    usage: /<command>
+    permission: tumauth.authenticate

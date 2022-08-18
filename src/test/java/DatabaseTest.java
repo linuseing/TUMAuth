@@ -25,26 +25,26 @@ public class DatabaseTest {
 
     @BeforeAll
     void setUp() throws SQLException {
-        String host = System.getenv("HOST");
+        /*String host = System.getenv("HOST");
         int port = Integer.parseInt(System.getenv("PORT"));
         String user = System.getenv("USER");
         String password = System.getenv("PASSWORD");
         String name = System.getenv("NAME");
 
-
+        */
         settingsManager = createMock(SettingsManager.class);
 
-        expect(settingsManager.getProperty(DataBaseProperties.DB_HOST)).andReturn(host);
-        expect(settingsManager.getProperty(DataBaseProperties.DB_PORT)).andReturn(port);
-        expect(settingsManager.getProperty(DataBaseProperties.DB_USER)).andReturn(user);
-        expect(settingsManager.getProperty(DataBaseProperties.DB_PASSWORD)).andReturn(password);
-        expect(settingsManager.getProperty(DataBaseProperties.DB_NAME)).andReturn(name);
+        expect(settingsManager.getProperty(DataBaseProperties.DB_HOST)).andReturn("");
+        expect(settingsManager.getProperty(DataBaseProperties.DB_PORT)).andReturn(0);
+        expect(settingsManager.getProperty(DataBaseProperties.DB_USER)).andReturn("postgres");
+        expect(settingsManager.getProperty(DataBaseProperties.DB_PASSWORD)).andReturn("qTIDo2Vx-ceWPQMS7P-HUdmopwKjNO");
+        expect(settingsManager.getProperty(DataBaseProperties.DB_NAME)).andReturn("name");
 
         replay(settingsManager);
 
         dataSource = new PostgreSqlDataSource(settingsManager);
 
-        dataSource.connect();
+        dataSource.connect("jdbc:postgresql://91.229.245.25:5432/postgres");
 
     }
 
@@ -59,11 +59,11 @@ public class DatabaseTest {
         dataSource.disconnect();
     }
 
+    @Test
     void connectionTest() {
-        assertDoesNotThrow(() -> dataSource.connect());
+        assertDoesNotThrow(() -> dataSource.connect("jdbc:postgresql://91.229.245.25:5432/postgres"));
     }
 
-    @Disabled
     @Test
     void addUserTest() {
         User user = new User(UUID.randomUUID(), "hg89hf", true, "test-token");
